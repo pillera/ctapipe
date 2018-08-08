@@ -10,7 +10,7 @@ from astropy import units as u
 from matplotlib import pyplot as plt
 from matplotlib.collections import PatchCollection
 from matplotlib.colors import Normalize, LogNorm, SymLogNorm
-from matplotlib.patches import Ellipse, RegularPolygon, Rectangle
+from matplotlib.patches import Ellipse, RegularPolygon, Rectangle, Circle
 from numpy import sqrt
 
 __all__ = ['CameraDisplay']
@@ -415,6 +415,69 @@ class CameraDisplay:
                     hillas_parameters.length,
                 ),
                 color=el.get_edgecolor()
+            )
+
+            self._axes_overlays.append(text)
+            
+    def add_ring(self, center, radius,
+                    **kwargs):
+        """
+        plot a ring on top of the camera
+
+        Parameters
+        ----------
+        center: (float, float)
+            position of center
+        radius: float
+            ring radius
+        kwargs:
+            any MatPlotLib style arguments to pass to the Ellipse patch
+
+        """
+        ring = Circle(xy=center, radius=radius, fill=False, **kwargs)
+        self.axes.add_patch(ring)
+        self.update()
+        return ring
+
+    def overlay_ringpar(self, ring_parameters, with_label=True, keep_old=False,
+                        **kwargs):
+        """helper to overlay ring 
+
+        Parameters
+        ----------
+        ring_parameters: (float, float, float)
+            center coords. x, y and radius
+        with_label: bool
+            If True, show coordinates of center and radius
+        keep_old: bool
+            If True, to not remove old overlays
+        kwargs: key=value
+            any style keywords to pass to matplotlib (e.g. color='red'
+            or linewidth=6)
+        """
+        if not keep_old:
+            self.clear_overlays()
+
+        cen_x, cen_y, rad = ring_parameters
+    
+        ring = self.add_ring(
+            center=(cen_x, cen_y),
+            radius=rad,
+            **kwargs
+        )
+
+        self._axes_overlays.append(ring)
+
+        if with_label:
+            text = self.axes.text(
+                cen_x,
+                cen_y,
+                "{:.02f},{:.02f}\nr={:.02f}".format(
+                    cen_x,
+                    cen_y,
+                    rad,
+                ),
+                color=ring.get_edgecolor()
             )
 
             self._axes_overlays.append(text)
