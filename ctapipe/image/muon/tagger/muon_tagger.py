@@ -28,7 +28,7 @@ class MuonTagger:
     Parameters
     ----------
     alg : str
-        'tabubin', 'mlp' or 'majority'
+        'taubin', 'mlp' or 'majority'
     muon_data : str
         muon data filepath
     shower_data : str
