@@ -80,6 +80,7 @@ if __name__ == '__main__':
     else:
         filename = get_dataset_path("gamma_test_large.simtel.gz")
 
+    filename = "/Users/robertapillera/CTA/proton_20deg_0deg_run50001___cta-prod3-lapalma3-2147m-LaPalma.simtel.gz"
     plt.style.use("ggplot")
     plt.show(block=False)
 
