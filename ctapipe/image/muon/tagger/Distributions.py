@@ -30,11 +30,11 @@ if __name__ == '__main__':
     endstring = "___cta-prod3-demo-2147m-LaPalma-baseline-mono.simtel.gz"
     if ns == 1:
         filename += "North_pointing/Data/"
-        filename += +"proton_20deg_"
+        filename += "proton_20deg_"
         filename += "0"
     elif ns == 2:
         filename = "South_pointing/Data/"
-        filename += +"proton_20deg_"
+        filename += "proton_20deg_"
         filename += "180"
     filename += "deg_run"
 
