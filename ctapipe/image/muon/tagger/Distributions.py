@@ -38,7 +38,7 @@ if __name__ == '__main__':
 
     start = (group-1)*500+1
     stop = start + 500
-    for run in range(start,stop):
+    for run in range(start,stop+1):
         
         sim_name = filename + str(run) + endstring
         n_events = 10000
@@ -46,7 +46,7 @@ if __name__ == '__main__':
         source = event_source(sim_name, max_events=n_events)
         calib = CameraCalibrator(r1_product="HESSIOR1Calibrator",eventsource=source)
 
-        foutsize_name = "/home/roberta.pillera/MuonAnalysis/ProtonFiles/Group_"+str(group)+"_size.txt"
+        foutsize_name = "/home/roberta.pillera/MuonAnalysis/ProtonFiles/Group_"+str(ns)+"_"+str(group)+"_size.txt"
         foutsize = open(foutsize_name,"w") #output file
 
         numev = 0
