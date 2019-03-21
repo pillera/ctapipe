@@ -8,7 +8,7 @@ from ctapipe.io import event_source
 
 if __name__ == '__main__':
     
-    print("Program started") 
+    #print("Program started") 
     if sys.argv[1:]:
         ns = int(sys.argv[1]) #north ns = 1 or south pointing ns=2
         #run = int(sys.argv[2])
@@ -26,13 +26,15 @@ if __name__ == '__main__':
     
 
     sim_dir = "/fefs/aswg/workspace/MC_common/corsika6.9_simtelarray_2018-11-07/LST4_monotrigger/prod3/proton/proton_20190226/"
-    filename = sim_dir+"proton_20deg_"
+    filename = sim_dir
     endstring = "___cta-prod3-demo-2147m-LaPalma-baseline-mono.simtel.gz"
     if ns == 1:
-        sim_dir += "North_pointing/Data/"
+        filename += "North_pointing/Data/"
+        filename += +"proton_20deg_"
         filename += "0"
     elif ns == 2:
-        sim_dir = "South_pointing/Data/"
+        filename = "South_pointing/Data/"
+        filename += +"proton_20deg_"
         filename += "180"
     filename += "deg_run"
 
