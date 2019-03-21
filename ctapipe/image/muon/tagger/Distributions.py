@@ -1,17 +1,10 @@
 #!/bin/env python
 import sys, os
 import numpy as np
-import warnings
-#from astropy.table import Table
 from ctapipe.calib import CameraCalibrator
-#from ctapipe.core import Tool
-from ctapipe.core import traits as t
-#from ctapipe.image.muon.muon_diagnostic_plots import plot_muon_event
-#from ctapipe.image.muon.muon_reco_functions import analyze_muon_event
 from ctapipe.io import event_source
-#from ctapipe.utils import get_dataset
 
-warnings.filterwarnings("ignore")  # Supresses iminuit warnings
+
 
 if __name__ == '__main__':
     
@@ -35,6 +28,7 @@ if __name__ == '__main__':
     filename += str(run)
     filename += "___cta-prod3-demo-2147m-LaPalma-baseline-mono.simtel.gz"
 
+    sim_name = sim_dir + filename
     n_events = 1
     tot_nr_ev = 0
 
