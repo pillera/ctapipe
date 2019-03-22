@@ -33,7 +33,7 @@ if __name__ == '__main__':
         filename += "proton_20deg_"
         filename += "0"
     elif ns == 2:
-        filename = "South_pointing/Data/"
+        filename += "South_pointing/Data/"
         filename += "proton_20deg_"
         filename += "180"
     filename += "deg_run"
