@@ -97,7 +97,7 @@ if __name__ == '__main__':
     
     t_total = t_end - t_start
     tab = Table(info)
-    tab.write("PreselectionResults"+str(ns)+".fits",format='fits')   
+    tab.write("/home/roberta.pillera/MuonAnalysis/PreselectionResults"+str(ns)+".fits",format='fits')   
 
     print("MUON SELECTION")
     print("Processing time: %f sec"%t_total)
