@@ -1,12 +1,13 @@
 #!/bin/env python
 import sys, os
+import warnings
 import numpy as np
 from ctapipe.calib import CameraCalibrator
 from ctapipe.io import event_source
 from ctapipe.image.muon.muon_reco_functions import analyze_muon_event
 import time
 
-
+warnings.filterwarnings("ignore")  # Supresses iminuit warnings
 
 if __name__ == '__main__':
     
