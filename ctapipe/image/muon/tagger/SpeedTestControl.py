@@ -43,8 +43,7 @@ if __name__ == '__main__':
         filename += "180"
     filename += "deg_run"
 
-    start = (group-1)*500+1
-    stop = start + 500
+    
     start = 1
     #stop = 5000
 
