@@ -10,7 +10,8 @@ from ctapipe.image.muon.muon_reco_functions import analyze_muon_event
 
 if __name__ == '__main__':
 
-    filename = "/lustrehome/pillera/proton_20deg_0deg_run1___cta-prod3-demo-2147m-LaPalma-baseline-mono.simtel.gz"
+    filename = "/fefs/aswg/workspace/MC_common/corsika6.9_simtelarray_2018-11-07/LST4_monotrigger/prod3/proton/proton_20190226/"
+    filename += "North_pointing/Data/proton_20deg_0deg_run1___cta-prod3-demo-2147m-LaPalma-baseline-mono.simtel.gz"
 
     #dic = np.loadtxt("CHEC_pixel_dictionary.dat",dtype=int)
     #geom_trigpat = CameraGeometry.from_table("CHEC_superpix_tab.fits",format="fits")
