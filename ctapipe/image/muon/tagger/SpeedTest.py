@@ -60,7 +60,7 @@ if __name__ == '__main__':
     for run in range(start,stop+1):
         
         sim_name = filename + str(run) + endstring
-        n_events = 10000
+        n_events = 1000
 
         source = event_source(sim_name, max_events=n_events)
         calib = CameraCalibrator(r1_product="HESSIOR1Calibrator",eventsource=source)
