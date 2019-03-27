@@ -40,6 +40,7 @@ if __name__ == '__main__':
 
     start = (group-1)*500+1
     stop = start + 500
+    numev = 0
     for run in range(start,stop):
         
         sim_name = filename + str(run) + endstring
@@ -53,10 +54,10 @@ if __name__ == '__main__':
 
         numev = 0
         for event in source:
-            
+            calib.calibrate(event)
             for telid in event.r0.tels_with_data:
                 
-                calib.calibrate(event)
+                
                 size = event.dl1.tel[telid].image[0].sum()
                 foutsize.write(str(size))
                 foutsize.write("\n")
