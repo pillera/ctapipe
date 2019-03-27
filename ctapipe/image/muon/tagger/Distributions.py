@@ -40,7 +40,7 @@ if __name__ == '__main__':
 
     start = (group-1)*500+1
     stop = start + 500
-    for run in range(start,stop+1):
+    for run in range(start,stop):
         
         sim_name = filename + str(run) + endstring
         n_events = 10000
