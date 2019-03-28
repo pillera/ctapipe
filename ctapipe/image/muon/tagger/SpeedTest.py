@@ -56,7 +56,8 @@ if __name__ == '__main__':
     selectedmuons = 0
     info = {'Run': [],
             'Ev_nr': []}
-    t_start = time.clock()
+    t = []
+    #t_start = time.clock()
     for run in range(start,stop+1):
         
         sim_name = filename + str(run) + endstring
@@ -69,7 +70,7 @@ if __name__ == '__main__':
         for event in source:
             
             calib.calibrate(event)
-            
+            t_start = time.clock()
             tag = [False]*len(event.dl0.tels_with_data) 
             i = 0
             for telid in event.r0.tels_with_data:
@@ -93,18 +94,22 @@ if __name__ == '__main__':
 
                 
     
-    t_end = time.clock()         
+            t_end = time.clock() 
+            t.append(t_end - t_start)
     
-    t_total = t_end - t_start
-    tab = Table(info)
+    
+    freq = 1./np.mean(np.array(t))
+    #t_total = t_end - t_start
+    #tab = Table(info)
     #tab.write("/home/roberta.pillera/MuonAnalysis/PreselectionResults"+str(ns)+".fits",format='fits')   
 
     print("MUON SELECTION")
-    print("Processing time: %f sec"%t_total)
+    #print("Processing time: %f sec"%t_total)
     print("Total number of events: %d"%tot_numev)
     print("Total tagged muons: %d"%taggedmuons)
     print("Total selected muons: %d"%selectedmuons)
-    print("Processing rate (n_tot/t_tot): %f"%(float(tot_numev)/t_total))
+    print("Processing rate: %f Hz"%freq)
+    #print("Processing rate (n_tot/t_tot): %f"%(float(tot_numev)/t_total))
     #print("Total number of images: %d"%tot_numimg)
 
     
