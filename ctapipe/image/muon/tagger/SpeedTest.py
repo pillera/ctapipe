@@ -87,12 +87,12 @@ if __name__ == '__main__':
                 t_end = time.clock() 
                 t.append(t_end - t_start)
                 continue
-            else: #analyze
-                muon_evt = analyze_muon_event(event)
-                if muon_evt['MuonIntensityParams']: #Muon is selected
-                    selectedmuons += 1
-                    info['Run'].append(run)
-                    info['Ev_nr'].append(numev-1)
+            # else: #analyze
+            #     muon_evt = analyze_muon_event(event)
+            #     if muon_evt['MuonIntensityParams']: #Muon is selected
+            #         selectedmuons += 1
+            #         info['Run'].append(run)
+            #         info['Ev_nr'].append(numev-1)
 
                 
     
