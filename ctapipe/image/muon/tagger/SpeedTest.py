@@ -57,7 +57,7 @@ if __name__ == '__main__':
     info = {'Run': [],
             'Ev_nr': []}
     t = []
-    #t_start = time.clock()
+    t_start = time.time()
     for run in range(start,stop+1):
         
         sim_name = filename + str(run) + endstring
@@ -70,7 +70,7 @@ if __name__ == '__main__':
         for event in source:
             
             calib.calibrate(event)
-            t_start = time.time()
+            
             tag = [False]*len(event.dl0.tels_with_data) 
             i = 0
             for telid in event.r0.tels_with_data:
@@ -83,25 +83,25 @@ if __name__ == '__main__':
 
             numev += 1
             tot_numev += 1
-            # if np.array(tag).sum() == 0: # no image is preselected
-            #     t_end = time.clock() 
-            #     t.append(t_end - t_start)
-            #     continue
-            # else: #analyze
-            #     muon_evt = analyze_muon_event(event)
-            #     if muon_evt['MuonIntensityParams']: #Muon is selected
-            #         selectedmuons += 1
-            #         info['Run'].append(run)
-            #         info['Ev_nr'].append(numev-1)
+            if np.array(tag).sum() == 0: # no image is preselected
+                t_end = time.clock() 
+                t.append(t_end - t_start)
+                continue
+            else: #analyze
+                muon_evt = analyze_muon_event(event)
+                if muon_evt['MuonIntensityParams']: #Muon is selected
+                    selectedmuons += 1
+                    info['Run'].append(run)
+                    info['Ev_nr'].append(numev-1)
 
                 
     
-            t_end = time.time() 
-            t.append(t_end - t_start)
+    t_end = time.time() 
+            #t.append(t_end - t_start)
     
     
-    freq = 1./np.mean(np.array(t))
-    #t_total = t_end - t_start
+    #freq = 1./np.mean(np.array(t))
+    t_total = t_end - t_start
     #tab = Table(info)
     #tab.write("/home/roberta.pillera/MuonAnalysis/PreselectionResults"+str(ns)+".fits",format='fits')   
 
@@ -110,8 +110,8 @@ if __name__ == '__main__':
     print("Total number of events: %d"%tot_numev)
     print("Total tagged muons: %d"%taggedmuons)
     print("Total selected muons: %d"%selectedmuons)
-    print("Processing rate: %f Hz"%freq)
-    #print("Processing rate (n_tot/t_tot): %f"%(float(tot_numev)/t_total))
+    #print("Processing rate: %f Hz"%freq)
+    print("Processing rate (n_tot/t_tot): %f"%(float(tot_numev)/t_total))
     #print("Total number of images: %d"%tot_numimg)
 
     
