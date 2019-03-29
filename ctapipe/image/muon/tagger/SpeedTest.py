@@ -56,8 +56,11 @@ if __name__ == '__main__':
     selectedmuons = 0
     info = {'Run': [],
             'Ev_nr': []}
-    t = []
-    t_start = time.time()
+    
+    t_calib = []
+    t_pres = []
+    t_fit = []
+    #t_start = time.time()
     for run in range(start,stop+1):
         
         sim_name = filename + str(run) + endstring
@@ -68,9 +71,11 @@ if __name__ == '__main__':
 
         numev = 0
         for event in source:
-            
+            t_start = time.time()
             calib.calibrate(event)
-            
+            t_end = time.time()
+            t_calib.append(t_end-t_start)
+            t_start = time.time()
             tag = [False]*len(event.dl0.tels_with_data) 
             i = 0
             for telid in event.r0.tels_with_data:
@@ -84,34 +89,50 @@ if __name__ == '__main__':
             numev += 1
             tot_numev += 1
             if np.array(tag).sum() == 0: # no image is preselected
-                #t_end = time.clock() 
-                #t.append(t_end - t_start)
+                t_end = time.clock() 
+                t_pres.append(t_end - t_start)
+                
                 continue
             else: #analyze
+                t_end = time.time()
+                t_pres.append(t_end - t_start)
+                t_start = time.time()
                 muon_evt = analyze_muon_event(event)
                 if muon_evt['MuonIntensityParams']: #Muon is selected
                     selectedmuons += 1
                     info['Run'].append(run)
                     info['Ev_nr'].append(numev-1)
-
+                t_end = time.time()
+                t_fit.append(t_end - t_start)
                 
     
-    t_end = time.time() 
+    #t_end = time.time() 
             #t.append(t_end - t_start)
     
     
-    #freq = 1./np.mean(np.array(t))
-    t_total = t_end - t_start
+    f_calib = 1./np.mean(t_calib)
+    df_calib = np.std(t_calib)/np.mean(t_calib)/np.mean(t_calib)
+    f_pres = 1./np.mean(t_pres)
+    df_pres = np.std(t_pres)/np.mean(t_pres)/np.mean(t_pres)
+    f_fit = 1./np.mean(t_fit)
+    df_fit = np.std(t_fit)/np.mean(t_fit)/np.mean(t_fit)
+    #t_total = t_end - t_start
     #tab = Table(info)
     #tab.write("/home/roberta.pillera/MuonAnalysis/PreselectionResults"+str(ns)+".fits",format='fits')   
 
-    print("MUON SELECTION")
-    #print("Processing time: %f sec"%t_total)
+    print("MUON SELECTION SPEED TEST")
     print("Total number of events: %d"%tot_numev)
-    print("Total tagged muons: %d"%taggedmuons)
-    print("Total selected muons: %d"%selectedmuons)
+    print("Calibration rate: (%f +/- %f) Hz"%(f_calib,df_calib))
+    print("Preselected muons: %d"%taggedmuons)
+    print("Preselection rate: (%f +/- %f) Hz"%(f_pres,df_pres))
+    print("Selected muons from fit: %d"%selectedmuons)
+    print("Fit rate: (%f +/- %f) Hz"%(f_fit,df_fit))
+    
+    #print("Processing time: %f sec"%t_total)
+    
+    
     #print("Processing rate: %f Hz"%freq)
-    print("Processing rate (n_tot/t_tot): %f"%(float(tot_numev)/t_total))
+    #print("Processing rate (n_tot/t_tot): %f"%(float(tot_numev)/t_total))
     #print("Total number of images: %d"%tot_numimg)
 
     
