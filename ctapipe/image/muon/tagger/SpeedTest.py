@@ -110,8 +110,8 @@ if __name__ == '__main__':
             #t.append(t_end - t_start)
     
     
-    f_calib = 1./np.mean(t_calib)
-    df_calib = np.std(t_calib)/np.mean(t_calib)/np.mean(t_calib)
+    #f_calib = 1./np.mean(t_calib)
+    #df_calib = np.std(t_calib)/np.mean(t_calib)/np.mean(t_calib)
     f_pres = 1./np.mean(t_pres)
     df_pres = np.std(t_pres)/np.mean(t_pres)/np.mean(t_pres)
     #f_fit = 1./np.mean(t_fit)
