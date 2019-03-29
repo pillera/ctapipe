@@ -70,7 +70,7 @@ if __name__ == '__main__':
         for event in source:
             
             calib.calibrate(event)
-            t_start = time.clock()
+            t_start = time.time()
             tag = [False]*len(event.dl0.tels_with_data) 
             i = 0
             for telid in event.r0.tels_with_data:
@@ -96,7 +96,7 @@ if __name__ == '__main__':
 
                 
     
-            t_end = time.clock() 
+            t_end = time.time() 
             t.append(t_end - t_start)
     
     
