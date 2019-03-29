@@ -89,7 +89,7 @@ if __name__ == '__main__':
             numev += 1
             tot_numev += 1
             if np.array(tag).sum() == 0: # no image is preselected
-                t_end = time.clock() 
+                t_end = time.time() 
                 t_pres.append(t_end - t_start)
                 
                 continue
