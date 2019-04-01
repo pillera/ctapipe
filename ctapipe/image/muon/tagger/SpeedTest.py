@@ -113,9 +113,9 @@ if __name__ == '__main__':
     # f_calib = 1./np.mean(t_calib)
     # df_calib = np.std(t_calib)/np.mean(t_calib)/np.mean(t_calib)
     # f_pres = 1./np.mean(t_pres)
-    df_pres = np.std(t_pres)/np.mean(t_pres)/np.mean(t_pres)
+    df_pres = np.std(t_pres)/np.mean(t_pres)/np.mean(t_pres)/np.sqrt(tot_numev)
     f_fit = 1./np.mean(t_fit)
-    df_fit = np.std(t_fit)/np.mean(t_fit)/np.mean(t_fit)
+    df_fit = np.std(t_fit)/np.mean(t_fit)/np.mean(t_fit)/np.sqrt(tot_numev)
     t_total = t_end - t_start
     tab = Table(info)
     #tab.write("/home/roberta.pillera/MuonAnalysis/PreselectionResults"+str(ns)+".fits",format='fits')   
