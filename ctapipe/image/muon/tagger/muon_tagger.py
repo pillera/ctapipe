@@ -311,7 +311,7 @@ class MuonTagger:
             pos = np.empty(geom.pix_x.shape + (2,))
             pos[..., 0] = geom.pix_x.value
             pos[..., 1] = geom.pix_y.value
-            start_time = time.clock()
+            start_time = time.time()
             for i in range(len(y)):                
                 rad, cx, cy = self.taubin_fit(pos[...,0],pos[...,1],X[i])
                 if np.abs(rad-0.05) <= xi_cut: #it's a muon
@@ -320,26 +320,26 @@ class MuonTagger:
                 else: #it's a shower
                     n_s += 1
                     y_class.append(1)
-            end_time = time.clock()
+            end_time = time.time()
         elif self.alg == 'mlp':
             clf = joblib.load("Trained_Classif.pkl")  
-            start_time = time.clock()          
+            start_time = time.time()          
             y_pred = clf.predict_proba(X)
             for i in range(len(y)):
                 if y_pred[i][1] <= xi_cut: #it's a muon
                     y_class.append(0)
                 else: #it's a shower
                     y_class.append(1)
-            end_time = time.clock()
+            end_time = time.time()
         elif self.alg == 'majority':
-            start_time = time.clock()
+            start_time = time.time()
             for i in range(len(y)):
                 xi = 512-self.majority_func(X[i])
                 if xi <= xi_cut: #it's a muon
                     y_class.append(0)
                 else: #it's a shower
                     y_class.append(1)
-            end_time = time.clock()
+            end_time = time.time()
         else: 
             print("ERROR: Invalid algorithm name")
             return
