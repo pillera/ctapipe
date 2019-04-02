@@ -81,7 +81,8 @@ if __name__ == '__main__':
             for telid in event.r0.tels_with_data:
                 i += 1
                 #tot_numimg += 1
-                if event.dl1.tel[telid].image[0].sum() > thr :
+                size = event.dl1.tel[telid].image[0].sum()
+                if (size > thr) and (size < 3800) :
                     #muon was tagged!
                     tag[i-1] = True
                     taggedmuons += 1
