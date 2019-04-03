@@ -48,7 +48,7 @@ if __name__ == '__main__':
         filename += "proton_20deg_"
         filename += "180"
     filename += "deg_run"
-
+    savedir = "/home/roberta.pillera/Plots/"
     
     start = 1
     #stop = 5000
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     t_fit = []
     #t_start = time.time()
 
-    geom = CameraGeometry.from_name('LSTcam')
+    geom = CameraGeometry.from_name('LSTCam')
     plt.figure()
     for run in range(start,stop+1):
         
@@ -111,13 +111,13 @@ if __name__ == '__main__':
                 disp = CameraDisplay(geom,image=event.dl1.tel[telid].image[0],ax=axes)
                 disp.add_colorbar()
                 plt.show()
-                plt.savefig("Preselected_event_%d_%d.pdf"%(run,numev))
-                muon_evt = analyze_muon_event(event)
+                plt.savefig(savedir+"Preselected_event_%d_%d.pdf"%(run,numev))
+                # muon_evt = analyze_muon_event(event)
 
-                if muon_evt['MuonIntensityParams']: #Muon is selected
-                    selectedmuons += 1
-                    info['Run'].append(run)
-                    info['Ev_nr'].append(numev-1)
+                # if muon_evt['MuonIntensityParams']: #Muon is selected
+                #     selectedmuons += 1
+                #     info['Run'].append(run)
+                #     info['Ev_nr'].append(numev-1)
                 t_end = time.time()
                 t_fit.append(t_end - t_start)
                 
