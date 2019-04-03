@@ -115,7 +115,7 @@ if __name__ == '__main__':
                     disp = CameraDisplay(geom,image=event.dl1.tel[telid].image[0],ax=axes)
                     disp.add_colorbar()
                     plt.show()
-                    plt.savefig(savedir+"Preselected_event_%d_%d.pdf"%(run,numev))
+                    plt.savefig(savedir+"Fitted_event_%d_%d.pdf"%(run,numev))
                     selectedmuons += 1
                     info['Run'].append(run)
                     info['Ev_nr'].append(numev-1)
