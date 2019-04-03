@@ -107,17 +107,18 @@ if __name__ == '__main__':
                 #t_pres.append(t_end - t_start)
                 #t_start = time.time()
                 #PLOT EVENT
-                axes = plt.subplot()
-                disp = CameraDisplay(geom,image=event.dl1.tel[telid].image[0],ax=axes)
-                disp.add_colorbar()
-                plt.show()
-                plt.savefig(savedir+"Preselected_event_%d_%d.pdf"%(run,numev))
-                # muon_evt = analyze_muon_event(event)
+                
+                muon_evt = analyze_muon_event(event)
 
-                # if muon_evt['MuonIntensityParams']: #Muon is selected
-                #     selectedmuons += 1
-                #     info['Run'].append(run)
-                #     info['Ev_nr'].append(numev-1)
+                if muon_evt['MuonIntensityParams']: #Muon is selected
+                    axes = plt.subplot()
+                    disp = CameraDisplay(geom,image=event.dl1.tel[telid].image[0],ax=axes)
+                    disp.add_colorbar()
+                    plt.show()
+                    plt.savefig(savedir+"Preselected_event_%d_%d.pdf"%(run,numev))
+                    selectedmuons += 1
+                    info['Run'].append(run)
+                    info['Ev_nr'].append(numev-1)
                 t_end = time.time()
                 t_fit.append(t_end - t_start)
                 
