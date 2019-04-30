@@ -60,7 +60,7 @@ if __name__ == '__main__':
             'Ev_nr': []}
     time_tab = {'Run_nr': [],
                 'Ev_nr': [],
-                'Time': [],
+                #'Time': [],
                 'Energy': []}
 
     t_start = time.clock()
@@ -104,7 +104,7 @@ if __name__ == '__main__':
                 t_end = time.clock() 
                 
             t_total = t_end - t_start
-            time_tab['Time'].append(t_total)     
+            #time_tab['Time'].append(t_total)     
     
         
     
