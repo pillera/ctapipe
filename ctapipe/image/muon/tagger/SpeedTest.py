@@ -107,10 +107,10 @@ if __name__ == '__main__':
     
     
     tab = Table(info)
-    tab.write("/home/roberta.pillera/MuonAnalysis/TimeAnalysis/PreselectionResults"+str(ns)+".fits",format='fits')   
+    tab.write("/home/roberta.pillera/MuonAnalysis/TimeAnalysis/PreselectionResults"+str(ns)+"_"+str(group)+".fits",format='fits')   
     timetable = Table(time_tab)
     timetable['Energy'].unit = 'TeV'
-    timetable.write("/home/roberta.pillera/MuonAnalysis/TimeAnalysis/Time_output"+str(ns)+".fits",format='fits')
+    timetable.write("/home/roberta.pillera/MuonAnalysis/TimeAnalysis/Time_output"+str(ns)+"_"+str(group)+".fits",format='fits')
     # print("MUON SELECTION")
     # print("Processing time: %f sec"%t_total)
     # print("Total number of events: %d"%tot_numev)
