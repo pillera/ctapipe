@@ -60,7 +60,7 @@ if __name__ == '__main__':
             'Ev_nr': []}
     time_tab = {'Run_nr': [],
                 'Ev_nr': [],
-                'Time': [],
+                #'Time': [],
                 'Energy': []}
 
     t_start = time.clock()
@@ -94,7 +94,7 @@ if __name__ == '__main__':
             if np.array(tag).sum() == 0: # no image is preselected
                 t_end = time.clock() 
                 t_total = t_end - t_start
-                time_tab['Time'].append(t_total)
+                #time_tab['Time'].append(t_total)
                 continue
             else: #analyze
                 muon_evt = analyze_muon_event(event)
@@ -104,7 +104,7 @@ if __name__ == '__main__':
                     info['Ev_nr'].append(numev-1)
                 t_end = time.clock() 
                 t_total = t_end - t_start
-                time_tab['Time'].append(t_total)
+                #time_tab['Time'].append(t_total)
                 
     
         
