@@ -16,9 +16,8 @@ if __name__ == '__main__':
     
     #print("Program started") 
     if sys.argv[1:]:
-        #thr = int(sys.argv[1]) 
-        stop = int(sys.argv[1])
-        n_events = int(sys.argv[2])
+        ns = int(sys.argv[1]) 
+        group = int(sys.argv[2])
         #run = int(sys.argv[2])
         #group = int(sys.argv[2])
     else:
@@ -32,7 +31,7 @@ if __name__ == '__main__':
     group -> 2 it starts from run 501 up to 1000
     """
     #north or south pointing
-    ns = 1
+    #ns = 1
     thr = 3500.
     sim_dir = "/fefs/aswg/workspace/MC_common/corsika6.9_simtelarray_2018-11-07/LST4_monotrigger/prod3/proton/proton_20190226/"
     filename = sim_dir
@@ -49,7 +48,8 @@ if __name__ == '__main__':
     
 
     
-    start = 1
+    start = (group-1)*500+1
+    stop = start + 500
     #stop = 5000
 
     tot_numev = 0
@@ -64,11 +64,11 @@ if __name__ == '__main__':
                 'Energy': []
                 }
 
-    t_start = time.clock()
+    
     for run in range(start,stop+1):
         
         sim_name = filename + str(run) + endstring
-        #n_events = 10000
+        n_events = 10000
 
         source = event_source(sim_name, max_events=n_events)
         calib = CameraCalibrator(r1_product="HESSIOR1Calibrator",eventsource=source)
