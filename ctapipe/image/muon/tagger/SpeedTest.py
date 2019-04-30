@@ -76,7 +76,7 @@ if __name__ == '__main__':
         for event in source:
             time_tab['Run_nr'].append(run)
             time_tab['Ev_nr'].append(event)
-            time_tab['Energy'].append(event.mc.energy.value)
+            #time_tab['Energy'].append(event.mc.energy.value)
             calib.calibrate(event)
             t_start = time.clock()
             tag = [False]*len(event.dl0.tels_with_data) 
@@ -112,7 +112,7 @@ if __name__ == '__main__':
     tab = Table(info)
     #tab.write("/home/roberta.pillera/MuonAnalysis/PreselectionResults"+str(ns)+".fits",format='fits')   
     timetable = Table(time_tab)
-    timetable['Energy'].unit = 'TeV'
+    #timetable['Energy'].unit = 'TeV'
     timetable.write("/home/roberta.pillera/MuonAnalysis/Time_output"+str(ns)+".fits",format='fits')
     print("MUON SELECTION")
     print("Processing time: %f sec"%t_total)
