@@ -60,8 +60,8 @@ if __name__ == '__main__':
             'Ev_nr': []}
     time_tab = {'Run_nr': [],
                 'Ev_nr': [],
-                #'Time': [],
-                #'Energy': []
+                'Time': [],
+                'Energy': []
                 }
 
     t_start = time.clock()
@@ -77,7 +77,7 @@ if __name__ == '__main__':
         for event in source:
             time_tab['Run_nr'].append(run)
             time_tab['Ev_nr'].append(numev)
-            #time_tab['Energy'].append(event.mc.energy.value)
+            time_tab['Energy'].append(event.mc.energy.value)
             calib.calibrate(event)
             t_start = time.clock()
             tag = [False]*len(event.dl0.tels_with_data) 
@@ -92,20 +92,16 @@ if __name__ == '__main__':
 
             numev += 1
             tot_numev += 1
-            if np.array(tag).sum() == 0: # no image is preselected
-                t_end = time.clock() 
-                
-                
-            else: #analyze
+            if not np.array(tag).sum() == 0: 
                 muon_evt = analyze_muon_event(event)
                 if muon_evt['MuonIntensityParams']: #Muon is selected
                     selectedmuons += 1
                     info['Run'].append(run)
                     info['Ev_nr'].append(numev-1)
-                t_end = time.clock() 
-                
+                      
+            t_end = time.clock()        
             t_total = t_end - t_start
-            #time_tab['Time'].append(t_total)     
+            time_tab['Time'].append(t_total)     
     
         
     
@@ -113,14 +109,14 @@ if __name__ == '__main__':
     tab = Table(info)
     #tab.write("/home/roberta.pillera/MuonAnalysis/PreselectionResults"+str(ns)+".fits",format='fits')   
     timetable = Table(time_tab)
-    #timetable['Energy'].unit = 'TeV'
+    timetable['Energy'].unit = 'TeV'
     timetable.write("/home/roberta.pillera/MuonAnalysis/Time_output"+str(ns)+".fits",format='fits')
-    print("MUON SELECTION")
-    print("Processing time: %f sec"%t_total)
-    print("Total number of events: %d"%tot_numev)
-    print("Total tagged muons: %d"%taggedmuons)
-    print("Total selected muons: %d"%selectedmuons)
-    print("Processing rate (n_tot/t_tot): %f"%(float(tot_numev)/t_total))
+    # print("MUON SELECTION")
+    # print("Processing time: %f sec"%t_total)
+    # print("Total number of events: %d"%tot_numev)
+    # print("Total tagged muons: %d"%taggedmuons)
+    # print("Total selected muons: %d"%selectedmuons)
+    # print("Processing rate (n_tot/t_tot): %f"%(float(tot_numev)/t_total))
     #print("Total number of images: %d"%tot_numimg)
 
     
