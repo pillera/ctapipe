@@ -18,6 +18,7 @@ if __name__ == '__main__':
     if sys.argv[1:]:
         #thr = int(sys.argv[1]) 
         stop = int(sys.argv[1])
+        n_events = int(sys.argv[2])
         #run = int(sys.argv[2])
         #group = int(sys.argv[2])
     else:
@@ -66,7 +67,7 @@ if __name__ == '__main__':
     for run in range(start,stop+1):
         
         sim_name = filename + str(run) + endstring
-        n_events = 10000
+        #n_events = 10000
 
         source = event_source(sim_name, max_events=n_events)
         calib = CameraCalibrator(r1_product="HESSIOR1Calibrator",eventsource=source)
