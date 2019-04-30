@@ -76,7 +76,7 @@ if __name__ == '__main__':
         numev = 0
         for event in source:
             time_tab['Run_nr'].append(run)
-            time_tab['Ev_nr'].append(event)
+            time_tab['Ev_nr'].append(numev)
             #time_tab['Energy'].append(event.mc.energy.value)
             calib.calibrate(event)
             t_start = time.clock()
