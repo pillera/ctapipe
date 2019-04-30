@@ -75,11 +75,12 @@ if __name__ == '__main__':
 
         numev = 0
         for event in source:
+            t_start = time.clock()
             time_tab['Run_nr'].append(run)
             time_tab['Ev_nr'].append(numev)
             time_tab['Energy'].append(event.mc.energy.value)
             calib.calibrate(event)
-            t_start = time.clock()
+            
             tag = [False]*len(event.dl0.tels_with_data) 
             i = 0
             for telid in event.r0.tels_with_data:
@@ -100,8 +101,7 @@ if __name__ == '__main__':
                     info['Ev_nr'].append(numev-1)
                       
             t_end = time.clock()        
-            t_total = t_end - t_start
-            time_tab['Time'].append(t_total)     
+            time_tab['Time'].append(t_end - t_start)     
     
         
     
