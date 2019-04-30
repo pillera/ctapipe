@@ -6,7 +6,6 @@ from ctapipe.calib import CameraCalibrator
 from ctapipe.io import event_source
 from ctapipe.image.muon.muon_reco_functions import analyze_muon_event
 import time
-from astropy.table import Table
 
 warnings.filterwarnings("ignore")  # Supresses iminuit warnings
 
@@ -16,8 +15,8 @@ if __name__ == '__main__':
     
     #print("Program started") 
     if sys.argv[1:]:
-        thr = int(sys.argv[1]) #north ns = 1 or south pointing ns=2
-        stop = int(sys.argv[2])
+        #thr = int(sys.argv[1]) 
+        stop = int(sys.argv[1])
         #run = int(sys.argv[2])
         #group = int(sys.argv[2])
     else:
@@ -32,7 +31,7 @@ if __name__ == '__main__':
     """
     #north or south pointing
     ns = 1
-
+    thr = 3500.
     sim_dir = "/fefs/aswg/workspace/MC_common/corsika6.9_simtelarray_2018-11-07/LST4_monotrigger/prod3/proton/proton_20190226/"
     filename = sim_dir
     endstring = "___cta-prod3-demo-2147m-LaPalma-baseline-mono.simtel.gz"
@@ -45,6 +44,7 @@ if __name__ == '__main__':
         filename += "proton_20deg_"
         filename += "180"
     filename += "deg_run"
+    
 
     
     start = 1
@@ -56,33 +56,33 @@ if __name__ == '__main__':
     selectedmuons = 0
     info = {'Run': [],
             'Ev_nr': []}
-    
-    t_calib = []
-    t_pres = []
-    t_fit = []
-    #t_start = time.time()
+    time_tab = {'Run_nr': [],
+                'Ev_nr': [],
+                'Time': [],
+                'Energy:'[]}
+
+    t_start = time.clock()
     for run in range(start,stop+1):
         
         sim_name = filename + str(run) + endstring
-        n_events = 1000
+        n_events = 10000
 
         source = event_source(sim_name, max_events=n_events)
         calib = CameraCalibrator(r1_product="HESSIOR1Calibrator",eventsource=source)
 
         numev = 0
         for event in source:
-            #t_start = time.time()
+            time_tab['Run_nr'].append(run)
+            time_tab['Ev_nr'].append(event)
+            time_tab['Energy'].append(event.mc.energy.value)
             calib.calibrate(event)
-            #t_end = time.time()
-            #t_calib.append(t_end-t_start)
-            t_start = time.time()
+            t_start = time.clock()
             tag = [False]*len(event.dl0.tels_with_data) 
             i = 0
             for telid in event.r0.tels_with_data:
                 i += 1
                 #tot_numimg += 1
-                size = event.dl1.tel[telid].image[0].sum()
-                if (size > thr) and (size < 3800) :
+                if event.dl1.tel[telid].image[0].sum() > thr :
                     #muon was tagged!
                     tag[i-1] = True
                     taggedmuons += 1
@@ -90,50 +90,34 @@ if __name__ == '__main__':
             numev += 1
             tot_numev += 1
             if np.array(tag).sum() == 0: # no image is preselected
-                t_end = time.time() 
-                t_fit.append(t_end - t_start)
-                
+                t_end = time.clock() 
+                t_total = t_end - t_start
+                time_tab['Time'].append(t_total)
                 continue
             else: #analyze
-                #t_end = time.time()
-                #t_pres.append(t_end - t_start)
-                #t_start = time.time()
                 muon_evt = analyze_muon_event(event)
                 if muon_evt['MuonIntensityParams']: #Muon is selected
                     selectedmuons += 1
                     info['Run'].append(run)
                     info['Ev_nr'].append(numev-1)
-                t_end = time.time()
-                t_fit.append(t_end - t_start)
+                t_end = time.clock() 
+                t_total = t_end - t_start
+                time_tab['Time'].append(t_total)
                 
     
-    #t_end = time.time() 
-            #t.append(t_end - t_start)
+        
     
     
-    # f_calib = 1./np.mean(t_calib)
-    # df_calib = np.std(t_calib)/np.mean(t_calib)/np.mean(t_calib)
-    # f_pres = 1./np.mean(t_pres)
-    df_pres = np.std(t_pres)/np.mean(t_pres)/np.mean(t_pres)/np.sqrt(tot_numev)
-    f_fit = 1./np.mean(t_fit)
-    df_fit = np.std(t_fit)/np.mean(t_fit)/np.mean(t_fit)/np.sqrt(tot_numev)
-    t_total = t_end - t_start
     tab = Table(info)
-    #tab.write("/home/roberta.pillera/MuonAnalysis/PreselectionResults"+str(ns)+".fits",format='fits')   
-
-    print("MUON SELECTION SPEED TEST WITHOUT CALIBRATION")
+    tab.write("/home/roberta.pillera/MuonAnalysis/PreselectionResults"+str(ns)+".fits",format='fits')   
+    timetable = Table(time_tab)
+    timetable.write("/home/roberta.pillera/MuonAnalysis/Time_output"+str(ns)+".fits",format='fits')
+    print("MUON SELECTION")
+    print("Processing time: %f sec"%t_total)
     print("Total number of events: %d"%tot_numev)
-    #print("Calibration rate: (%f +/- %f) Hz"%(f_calib,df_calib))
-    print("Preselected muons: %d"%taggedmuons)
-    #print("Preselection rate: (%f +/- %f) Hz"%(f_pres,df_pres))
-    print("Selected muons from fit: %d"%selectedmuons)
-    print("Fit rate: (%f +/- %f) Hz"%(f_fit,df_fit))
-    
-    #print("Processing time: %f sec"%t_total)
-    
-    
-    #print("Processing rate: %f Hz"%freq)
-    #print("Processing rate (n_tot/t_tot): %f"%(float(tot_numev)/t_total))
+    print("Total tagged muons: %d"%taggedmuons)
+    print("Total selected muons: %d"%selectedmuons)
+    print("Processing rate (n_tot/t_tot): %f"%(float(tot_numev)/t_total))
     #print("Total number of images: %d"%tot_numimg)
 
     
