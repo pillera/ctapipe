@@ -61,7 +61,8 @@ if __name__ == '__main__':
     time_tab = {'Run_nr': [],
                 'Ev_nr': [],
                 #'Time': [],
-                'Energy': []}
+                #'Energy': []
+                }
 
     t_start = time.clock()
     for run in range(start,stop+1):
