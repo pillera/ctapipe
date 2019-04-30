@@ -93,9 +93,8 @@ if __name__ == '__main__':
             tot_numev += 1
             if np.array(tag).sum() == 0: # no image is preselected
                 t_end = time.clock() 
-                t_total = t_end - t_start
-                time_tab['Time'].append(t_total)
-                continue
+                
+                
             else: #analyze
                 muon_evt = analyze_muon_event(event)
                 if muon_evt['MuonIntensityParams']: #Muon is selected
@@ -103,9 +102,9 @@ if __name__ == '__main__':
                     info['Run'].append(run)
                     info['Ev_nr'].append(numev-1)
                 t_end = time.clock() 
-                t_total = t_end - t_start
-                time_tab['Time'].append(t_total)
                 
+            t_total = t_end - t_start
+            time_tab['Time'].append(t_total)     
     
         
     
@@ -114,7 +113,7 @@ if __name__ == '__main__':
     #tab.write("/home/roberta.pillera/MuonAnalysis/PreselectionResults"+str(ns)+".fits",format='fits')   
     timetable = Table(time_tab)
     timetable['Energy'].unit = 'TeV'
-    timetable.write("/home/roberta.pillera/MuonAnalysis/Time_output"+str(ns)+".fits")
+    timetable.write("/home/roberta.pillera/MuonAnalysis/Time_output"+str(ns)+".fits",format='fits')
     print("MUON SELECTION")
     print("Processing time: %f sec"%t_total)
     print("Total number of events: %d"%tot_numev)
