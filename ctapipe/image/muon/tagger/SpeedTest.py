@@ -21,7 +21,7 @@ if __name__ == '__main__':
         #run = int(sys.argv[2])
         #group = int(sys.argv[2])
     else:
-        thr = 3500. #cut at 0.7 ringcompleteness
+        thr = 2500. #cut at 0.7 ringcompleteness
         stop = 5000
         #group = 1
         #run = 1
@@ -110,10 +110,10 @@ if __name__ == '__main__':
     
     
     tab = Table(info)
-    tab.write("/home/roberta.pillera/MuonAnalysis/TimeAnalysis/OnlyPreselectionResults"+str(ns)+"_"+str(group)+".fits",format='fits')   
+    tab.write("/home/roberta.pillera/MuonAnalysis/TimeAnalysis/2500OnlyPreselectionResults"+str(ns)+"_"+str(group)+".fits",format='fits')   
     timetable = Table(time_tab)
     timetable['Energy'].unit = 'TeV'
-    timetable.write("/home/roberta.pillera/MuonAnalysis/TimeAnalysis/OnlyTime_output"+str(ns)+"_"+str(group)+".fits",format='fits')
+    timetable.write("/home/roberta.pillera/MuonAnalysis/TimeAnalysis/2500OnlyTime_output"+str(ns)+"_"+str(group)+".fits",format='fits')
     # print("MUON SELECTION")
     # print("Processing time: %f sec"%t_total)
     # print("Total number of events: %d"%tot_numev)
