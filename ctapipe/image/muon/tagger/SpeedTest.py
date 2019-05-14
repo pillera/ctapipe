@@ -94,11 +94,14 @@ if __name__ == '__main__':
             numev += 1
             tot_numev += 1
             if not np.array(tag).sum() == 0: 
-                muon_evt = analyze_muon_event(event)
-                if muon_evt['MuonIntensityParams']: #Muon is selected
-                    selectedmuons += 1
-                    info['Run'].append(run)
-                    info['Ev_nr'].append(numev-1)
+                flag = True
+            else:
+                flag = False
+                # muon_evt = analyze_muon_event(event)
+                # if muon_evt['MuonIntensityParams']: #Muon is selected
+                #     selectedmuons += 1
+                #     info['Run'].append(run)
+                #     info['Ev_nr'].append(numev-1)
                       
             t_end = time.clock()        
             time_tab['Time'].append(t_end - t_start)     
@@ -107,10 +110,10 @@ if __name__ == '__main__':
     
     
     tab = Table(info)
-    tab.write("/home/roberta.pillera/MuonAnalysis/TimeAnalysis/PreselectionResults"+str(ns)+"_"+str(group)+".fits",format='fits')   
+    tab.write("/home/roberta.pillera/MuonAnalysis/TimeAnalysis/OnlyPreselectionResults"+str(ns)+"_"+str(group)+".fits",format='fits')   
     timetable = Table(time_tab)
     timetable['Energy'].unit = 'TeV'
-    timetable.write("/home/roberta.pillera/MuonAnalysis/TimeAnalysis/Time_output"+str(ns)+"_"+str(group)+".fits",format='fits')
+    timetable.write("/home/roberta.pillera/MuonAnalysis/TimeAnalysis/OnlyTime_output"+str(ns)+"_"+str(group)+".fits",format='fits')
     # print("MUON SELECTION")
     # print("Processing time: %f sec"%t_total)
     # print("Total number of events: %d"%tot_numev)
