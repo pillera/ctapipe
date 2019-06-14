@@ -77,11 +77,12 @@ if __name__ == '__main__':
         numev = 0
         for event in source:
             
-            time_tab['Run_nr'].append(run)
-            time_tab['Ev_nr'].append(numev)
-            time_tab['Energy'].append(event.mc.energy.value)
+            
             calib.calibrate(event)
             for telid in event.r0.tels_with_data:
+                time_tab['Run_nr'].append(run)
+                time_tab['Ev_nr'].append(numev)
+                time_tab['Energy'].append(event.mc.energy.value)
                 time_tab['Size'].append(event.dl1.tel[telid].image[0].sum())
             # t_start = time.clock()
             # tag = [False]*len(event.dl0.tels_with_data) 
