@@ -56,19 +56,20 @@ if __name__ == '__main__':
     #tot_numimg = 0
     taggedmuons = 0
     selectedmuons = 0
-    info = {'Run': [],
-            'Ev_nr': []}
+    
     time_tab = {'Run_nr': [],
                 'Ev_nr': [],
+                'Size': [],
                 'Time': [],
-                'Energy': []
+                'Energy': [],
+                'Flag': []
                 }
 
     
     for run in range(start,stop+1):
         
         sim_name = filename + str(run) + endstring
-        n_events = 10000
+        n_events = None
 
         source = event_source(sim_name, max_events=n_events)
         calib = CameraCalibrator(r1_product="HESSIOR1Calibrator",eventsource=source)
@@ -80,6 +81,8 @@ if __name__ == '__main__':
             time_tab['Ev_nr'].append(numev)
             time_tab['Energy'].append(event.mc.energy.value)
             calib.calibrate(event)
+            for telid in event.r0.tels_with_data:
+                time_tab['Size'].append(event.dl1.tel[telid].image[0].sum())
             t_start = time.clock()
             tag = [False]*len(event.dl0.tels_with_data) 
             i = 0
@@ -94,9 +97,11 @@ if __name__ == '__main__':
             numev += 1
             tot_numev += 1
             if not np.array(tag).sum() == 0: 
-                flag = True
+                # flag = True
+                time_tab['Flag'].append(True)
             else:
-                flag = False
+                #flag = False
+                time_tab['Flag'].append(False)
                 # muon_evt = analyze_muon_event(event)
                 # if muon_evt['MuonIntensityParams']: #Muon is selected
                 #     selectedmuons += 1
@@ -109,11 +114,11 @@ if __name__ == '__main__':
         
     
     
-    tab = Table(info)
-    tab.write("/home/roberta.pillera/MuonAnalysis/TimeAnalysis/2500OnlyPreselectionResults"+str(ns)+"_"+str(group)+".fits",format='fits')   
+    #tab = Table(info)
+    #tab.write("/home/roberta.pillera/MuonAnalysis/TimeAnalysis/2500OnlyPreselectionResults"+str(ns)+"_"+str(group)+".fits",format='fits')   
     timetable = Table(time_tab)
     timetable['Energy'].unit = 'TeV'
-    timetable.write("/home/roberta.pillera/MuonAnalysis/TimeAnalysis/2500OnlyTime_output"+str(ns)+"_"+str(group)+".fits",format='fits')
+    timetable.write("/home/roberta.pillera/MuonAnalysis/SummaryTables/Table_"+str(ns)+"_"+str(group)+".fits",format='fits')
     # print("MUON SELECTION")
     # print("Processing time: %f sec"%t_total)
     # print("Total number of events: %d"%tot_numev)
