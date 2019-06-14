@@ -32,7 +32,7 @@ if __name__ == '__main__':
     """
     #north or south pointing
     #ns = 1
-    thr = 3500.
+    thr = 2500.
     sim_dir = "/fefs/aswg/workspace/MC_common/corsika6.9_simtelarray_2018-11-07/LST4_monotrigger/prod3/proton/proton_20190226/"
     filename = sim_dir
     endstring = "___cta-prod3-demo-2147m-LaPalma-baseline-mono.simtel.gz"
@@ -60,9 +60,9 @@ if __name__ == '__main__':
     time_tab = {'Run_nr': [],
                 'Ev_nr': [],
                 'Size': [],
-                'Time': [],
-                'Energy': [],
-                'Flag': []
+                #'Time': [],
+                'Energy': []
+                #'Flag': []
                 }
 
     
@@ -83,33 +83,33 @@ if __name__ == '__main__':
             calib.calibrate(event)
             for telid in event.r0.tels_with_data:
                 time_tab['Size'].append(event.dl1.tel[telid].image[0].sum())
-            t_start = time.clock()
-            tag = [False]*len(event.dl0.tels_with_data) 
-            i = 0
-            for telid in event.r0.tels_with_data:
-                i += 1
-                #tot_numimg += 1
-                if event.dl1.tel[telid].image[0].sum() > thr :
-                    #muon was tagged!
-                    tag[i-1] = True
-                    taggedmuons += 1
+            # t_start = time.clock()
+            # tag = [False]*len(event.dl0.tels_with_data) 
+            # i = 0
+            # for telid in event.r0.tels_with_data:
+            #     i += 1
+            #     #tot_numimg += 1
+            #     if event.dl1.tel[telid].image[0].sum() > thr :
+            #         #muon was tagged!
+            #         tag[i-1] = True
+            #         taggedmuons += 1
 
-            numev += 1
-            tot_numev += 1
-            if not np.array(tag).sum() == 0: 
-                # flag = True
-                time_tab['Flag'].append(True)
-            else:
-                #flag = False
-                time_tab['Flag'].append(False)
-                # muon_evt = analyze_muon_event(event)
-                # if muon_evt['MuonIntensityParams']: #Muon is selected
-                #     selectedmuons += 1
-                #     info['Run'].append(run)
-                #     info['Ev_nr'].append(numev-1)
+            # numev += 1
+            # tot_numev += 1
+            # if not np.array(tag).sum() == 0: 
+            #     # flag = True
+            #     time_tab['Flag'].append(True)
+            # else:
+            #     #flag = False
+            #     time_tab['Flag'].append(False)
+            #     # muon_evt = analyze_muon_event(event)
+            #     # if muon_evt['MuonIntensityParams']: #Muon is selected
+            #     #     selectedmuons += 1
+            #     #     info['Run'].append(run)
+            #     #     info['Ev_nr'].append(numev-1)
                       
-            t_end = time.clock()        
-            time_tab['Time'].append(t_end - t_start)     
+            # t_end = time.clock()        
+            # time_tab['Time'].append(t_end - t_start)     
     
         
     
