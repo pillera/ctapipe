@@ -48,9 +48,14 @@ if __name__ == '__main__':
     
     start = (group-1)*500+1
     stop = start + 500
-    
+    stop = 2    
     tab = { 'Run_nr': [],
-            'Ev_nr': []}
+            'Ev_nr': [],
+            'Tel_id': [],
+            'Flag': [],
+            'RingComp':[],
+            'Energy': [],
+            'Size': []}
 
     
     for run in range(start,stop+1):
@@ -67,18 +72,32 @@ if __name__ == '__main__':
             numev += 1
             calib.calibrate(event)
             muon_evt = analyze_muon_event(event)
-            if not muon_evt['MuonIntensityParams']:  # No telescopes contained a good muon
-                continue
-            else:
+            if muon_evt['TelIds'] is not None:
                 for tid in muon_evt['TelIds']:
                     idx = muon_evt['TelIds'].index(tid)
+                    tab['Run_nr'].append(run)
+                    tab['Ev_nr'].append(numev-1)
+                    tab['Tel_id'].append(idx)
+                    tab['Energy'].append(event.mc.energy.value)
+       	       	    tab['Size'].append(event.dl1.tel[tid].image[0].sum())
                     if muon_evt['MuonIntensityParams'][idx] is not None:
-                        tab['Run_nr'].append(run)
-                        tab['Ev_nr'].append(numev-1)
- 
+                        tab['Flag'].append(True)
+                        tab['RingComp'].append(muon_evt['MuonIntensityParams'][idx].ring_completeness)
+                    else:
+                        tab['Flag'].append(False)
+                        tab['RingComp'].append(-1)
+            else:
+                for tid in event.r0.tels_with_data:
+                    #idx = muon_evt['TelIds'].index(tid)
+                    tab['Run_nr'].append(run)
+                    tab['Ev_nr'].append(numev-1)
+                    tab['Tel_id'].append(tid)
+                    tab['Energy'].append(event.mc.energy.value)
+                    tab['Size'].append(event.dl1.tel[tid].image[0].sum())
+                
     table = Table(tab)
-    table.write("/home/roberta.pillera/MuonAnalysis/SummaryTables/Fit_table_"+str(ns)+"_"+str(group)+".fits",format='fits')
-    
+#    table.write("/home/roberta.pillera/MuonAnalysis/SummaryTables/Fit_table_all_"+str(ns)+"_"+str(group)+".fits",format='fits')
+    table.write("/home/roberta.pillera/MuonAnalysis/SummaryTables/Test.fits",format="fits")   
 
     
     
