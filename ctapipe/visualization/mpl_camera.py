@@ -80,7 +80,7 @@ class CameraDisplay:
     Output:
         Since CameraDisplay uses matplotlib, any display can be
         saved to any output file supported via
-        plt.savefig(filename). This includes `.pdf` and `.png`.
+        plt.savefig(filename). This includes ``.pdf`` and ``.png``.
 
     """
 
@@ -94,10 +94,9 @@ class CameraDisplay:
             cmap=None,
             allow_pick=False,
             autoupdate=True,
-            autoscale=True
+            autoscale=True,
     ):
         self.axes = ax if ax is not None else plt.gca()
-        self.geom = geometry
         self.pixels = None
         self.colorbar = None
         self.autoupdate = autoupdate
@@ -105,6 +104,8 @@ class CameraDisplay:
         self._active_pixel = None
         self._active_pixel_label = None
         self._axes_overlays = []
+
+        self.geom = geometry
 
         if title is None:
             title = geometry.cam_id
@@ -117,25 +118,25 @@ class CameraDisplay:
         if not hasattr(self.geom, "mask"):
             self.geom.mask = np.ones_like(self.geom.pix_x.value, dtype=bool)
 
-        for xx, yy, aa in zip(
-                u.Quantity(self.geom.pix_x[self.geom.mask]).value,
-                u.Quantity(self.geom.pix_y[self.geom.mask]).value,
-                u.Quantity(np.array(self.geom.pix_area)[self.geom.mask]).value):
+        pix_x = self.geom.pix_x.value[self.geom.mask]
+        pix_y = self.geom.pix_y.value[self.geom.mask]
+        pix_area = self.geom.pix_area.value[self.geom.mask]
 
+        for x, y, area in zip(pix_x, pix_y, pix_area):
             if self.geom.pix_type.startswith("hex"):
-                rr = sqrt(aa * 2 / 3 / sqrt(3)) + 2 * PIXEL_EPSILON
+                r = sqrt(area * 2 / 3 / sqrt(3)) + 2 * PIXEL_EPSILON
                 poly = RegularPolygon(
-                    (xx, yy), 6, radius=rr,
-                    orientation=self.geom.pix_rotation.rad,
+                    (x, y), 6, radius=r,
+                    orientation=self.geom.pix_rotation.to_value(u.rad),
                     fill=True,
                 )
             else:
-                rr = sqrt(aa) + PIXEL_EPSILON
+                r = sqrt(area) + PIXEL_EPSILON
                 poly = Rectangle(
-                    (xx - rr / 2., yy - rr / 2.),
-                    width=rr,
-                    height=rr,
-                    angle=self.geom.pix_rotation.deg,
+                    (x - r / 2, y - r / 2),
+                    width=r,
+                    height=r,
+                    angle=self.geom.pix_rotation.to_value(u.deg),
                     fill=True,
                 )
 
@@ -153,8 +154,8 @@ class CameraDisplay:
 
         self.axes.set_aspect('equal', 'datalim')
         self.axes.set_title(title)
-        self.axes.set_xlabel("X position ({})".format(self.geom.pix_x.unit))
-        self.axes.set_ylabel("Y position ({})".format(self.geom.pix_y.unit))
+        self.axes.set_xlabel(f"X position ({self.geom.pix_x.unit})")
+        self.axes.set_ylabel(f"Y position ({self.geom.pix_y.unit})")
         self.axes.autoscale_view()
 
         # set up a patch to display when a pixel is clicked (and
@@ -228,8 +229,8 @@ class CameraDisplay:
 
     def set_limits_percent(self, percent=95):
         """ auto-scale the color range to percent of maximum """
-        zmin = self.pixels.get_array().min()
-        zmax = self.pixels.get_array().max()
+        zmin = np.nanmin(self.pixels.get_array())
+        zmax = np.nanmax(self.pixels.get_array())
         dz = zmax - zmin
         frac = percent / 100.0
         self.autoscale = False
@@ -300,13 +301,12 @@ class CameraDisplay:
         """
         image = np.asanyarray(image)
         if image.shape != self.geom.pix_x.shape:
-            raise ValueError(
+            raise ValueError((
                 "Image has a different shape {} than the "
                 "given CameraGeometry {}"
-                    .format(image.shape, self.geom.pix_x.shape)
-            )
+            ).format(image.shape, self.geom.pix_x.shape))
 
-        self.pixels.set_array(image[self.geom.mask])
+        self.pixels.set_array(np.ma.masked_invalid(image[self.geom.mask]))
         self.pixels.changed()
         if self.autoscale:
             self.pixels.autoscale()
@@ -502,7 +502,7 @@ class CameraDisplay:
         self._active_pixel.set_visible(True)
         self._active_pixel_label.set_x(xx)
         self._active_pixel_label.set_y(yy)
-        self._active_pixel_label.set_text("{:003d}".format(pix_id))
+        self._active_pixel_label.set_text(f"{pix_id:003d}")
         self._active_pixel_label.set_visible(True)
         self._update()
         self.on_pixel_clicked(pix_id)  # call user-function
@@ -511,7 +511,7 @@ class CameraDisplay:
         """virtual function to overide in sub-classes to do something special
         when a pixel is clicked
         """
-        print("Clicked pixel_id {}".format(pix_id))
+        print(f"Clicked pixel_id {pix_id}")
 
     def show(self):
         self.axes.figure.show()
