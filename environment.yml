@@ -1,5 +1,5 @@
 # A conda environment with all useful package for ctapipe developers
-name: cta-dev
+name: cta
 channels:
   - default
   - cta-observatory
